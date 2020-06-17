@@ -8,6 +8,9 @@ cred <- git2r::cred_ssh_key(
   privatekey = "~/../.ssh/id_rsa"
 )
 
+# No Sheel:
+# eval `ssh-agent`
+# ssh-add
 
 file.exists(cred$publickey, cred$privatekey)
 
@@ -15,7 +18,7 @@ file.exists(cred$publickey, cred$privatekey)
 usethis::use_github(credentials = cred)
 
 # Comando para pegar o github token
-usethis::browse_github_token()
+# usethis::browse_github_token()
 
 ## Initialize the repository
 repo <- git2r::init()
@@ -57,7 +60,14 @@ status(repo)
 
 ## Add file and commit
 add(repo, "*") # colocar o asterisco é um truque para adicionar todos os arquivos
-commit(repo, message = "Commit message", all = TRUE)
+
+commit(repo, message = "Commit from RStudio 2020-06-17 12h15", all = TRUE)
 
 
 
+push(repo, credentials = cred) 
+
+
+ssh_auth_sock <- system("echo $SSH_AUTH_SOCK", intern = TRUE)
+Sys.setenv(SSH_AUTH_SOCK = ssh_auth_sock)
+Sys.getenv("SSH_AUTH_SOCK")
